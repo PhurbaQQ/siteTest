@@ -39,8 +39,8 @@
       name: jenkins
       state: latest        
     
-    - name: Install Nginx
-      apt:
-        name: nginx
-        state: latest
+  - name: Install Nginx
+    apt:
+      name: nginx
+      state: latest
         
