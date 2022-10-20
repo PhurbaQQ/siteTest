@@ -2,12 +2,6 @@ pipeline {
   agent any
 
   stages {
-    stage("clone git") {
-        steps{
-          git credentialsId: 'GitHub', url: 'https://github.com/PhurbaQQ/siteTest.git'
-        }
-      
-    }
     stage("find file") {
       steps {
         fileExists './site.html'
