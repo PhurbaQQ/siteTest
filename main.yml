@@ -21,21 +21,26 @@
       state: present
       update_cache: yes
 
-  - name: ensure the jenkins apt repository key is installed
-      apt_key: url='https://pkg.jenkins.io/debian-stable/jenkins.io.key' state=present
-      become: yes
+  - name: Add Jenkins apt repository key
+    ansible.builtin.get_url:
+      url: "https://pkg.jenkins.io/debian{{ '-stable' if (jenkins_prefer_lts | bool) else '' }}/jenkins.io.key"
+      dest: /etc/apt/trusted.gpg.d/jenkins.asc
+      mode: '0644'
+      force: true
 
-    - name: ensure the repository is configured
-      apt_repository: repo='deb https://pkg.jenkins.io/debian-stable binary/' state=present
-      become: yes
+  - name: Add Jenkins apt repository.
+    apt_repository:
+      repo: "https://pkg.jenkins.io/debian{{ '-stable' if (jenkins_prefer_lts | bool) else '' }} binary/"
+      state: present
+      update_cache: true
 
-    - name: ensure jenkins is installed
-      apt: name=jenkins update_cache=yes
-      become: yes
-
-    - name: ensure jenkins is running
-      service: name=jenkins state=started
+  - name: Install Jenkins
+    apt:
+      name: jenkins
+      state: latest        
     
     - name: Install Nginx
-      apt: name=nginx state=latest
+      apt:
+        name: nginx
+        state: latest
         
