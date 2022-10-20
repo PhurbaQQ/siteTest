@@ -1,0 +1,41 @@
+---
+- name: install Jenkins
+  hosts: server1
+  become: yes
+  tasks:
+  - name: update system
+    apt: apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+  - name: upgrade system
+    apt: upgrade=dist force_apt_get=yes
+
+  - name: Install git
+    apt:
+      name: git
+      state: present
+      update_cache: yes
+
+  - name: Install Java 11
+    apt:
+      name: openjdk-11-jdk
+      state: present
+      update_cache: yes
+
+  - name: ensure the jenkins apt repository key is installed
+      apt_key: url=https://pkg.jenkins.io/debian-stable/jenkins.io.key state=present
+      become: yes
+
+    - name: ensure the repository is configured
+      apt_repository: repo='deb https://pkg.jenkins.io/debian-stable binary/' state=present
+      become: yes
+
+    - name: ensure jenkins is installed
+      apt: name=jenkins update_cache=yes
+      become: yes
+
+    - name: ensure jenkins is running
+      service: name=jenkins state=started
+    
+    - name: Install Nginx
+      apt: name=nginx state=latest
+        
