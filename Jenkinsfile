@@ -5,7 +5,7 @@ pipeline {
     
     stage("copy site page") {
       steps {
-        sh 'cp $JENKINS_HOME/site.html /var/www/html/'
+        sh 'cp $JENKINS_HOME/workspace/Test_main/site.html /var/www/html/'
       }
       
     }
